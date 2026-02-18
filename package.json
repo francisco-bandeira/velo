@@ -8,7 +8,11 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "yarn playwright test",
+    "ui":"yarn playwright test --ui",
+    "debug":"yarn playwright test --debug",
+    "codegen":"yarn playwright codegen"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
