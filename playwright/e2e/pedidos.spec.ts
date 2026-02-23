@@ -18,43 +18,101 @@ test.describe('Consulta de Pedido', () => {
 
   })
 
-
   test('deve consultar um pedido aprovado', async ({ page }) => {
     //Test Data
-    const orderNumber = 'VLO-XH9EB0';
+    //const orderNumber = 'VLO-XH9EB0';
+    const order = {
+      number: 'VLO-XH9EB0',
+      status:'APROVADO',
+      wheels: 'sport Wheels',
+      color: 'Midnight Black',
+      customer: {
+        name: 'Francisco Bandeira',
+        email: 'bandeira@velo.dev'
+      },
+      payment: 'À Vista'
+    }
 
     //Act
-    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(orderNumber);
+    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number);
     await page.getByRole('button', { name: 'Buscar Pedido' }).click();
 
     //Assert
-    await expect(page.getByTestId(`order-result-${orderNumber}`)).toMatchAriaSnapshot(`
+    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
       - img 
       - paragraph: Pedido
-      - paragraph: ${orderNumber}
+      - paragraph: ${order.number}
       - img
-      - text: APROVADO
+      - text: ${order.status}
       - img "Velô Sprint"
       - paragraph: Modelo
       - paragraph: Velô Sprint
       - paragraph: Cor
-      - paragraph: Midnight Black
+      - paragraph: ${order.color}
       - paragraph: Interior
       - paragraph: cream
       - paragraph: Rodas
-      - paragraph: sport Wheels
+      - paragraph: ${order.wheels}
       - heading "Dados do Cliente" [level=4]
       - paragraph: Nome
-      - paragraph: Francisco Bandeira
+      - paragraph: ${order.customer.name}
       - paragraph: Email
-      - paragraph: bandeira@velo.dev
+      - paragraph: ${order.customer.email}
       - paragraph: Loja de Retirada
       - paragraph
       - paragraph: Data do Pedido
       - paragraph: /\\d+\\/\\d+\\/\\d+/
       - heading "Pagamento" [level=4]
-      - paragraph: À Vista
+      - paragraph: ${order.payment}
       - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
+      `);
+  })
+
+  test('deve consultar um pedido reprovado', async ({ page }) => {
+    //Test Data
+    // const orderNumber = 'VLO-RDOEEI';
+    const order = {
+      number: 'VLO-RDOEEI',
+      status:'REPROVADO',
+      color: 'Glacier Blue',
+      wheels: 'sport Wheels',
+      customer: {
+        name: 'Steve Jobs',
+        email: 'jobs@dev.com'
+      },
+      payment: 'À Vista'
+    }
+    //Act
+    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number);
+    await page.getByRole('button', { name: 'Buscar Pedido' }).click();
+
+    //Assert
+    await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
+    - img
+    - paragraph: Pedido
+    - paragraph: ${order.number}
+    - img
+    - text: ${order.status}
+    - paragraph: Modelo
+    - paragraph: Velô Sprint
+    - paragraph: Cor
+    - paragraph: ${order.color}
+    - paragraph: Interior
+    - paragraph: cream
+    - paragraph: Rodas
+    - paragraph: ${order.wheels}
+    - heading "Dados do Cliente" [level=4]
+    - paragraph: Nome
+    - paragraph: ${order.customer.name}
+    - paragraph: Email
+    - paragraph: ${order.customer.email}
+    - paragraph: Loja de Retirada
+    - paragraph
+    - paragraph: Data do Pedido
+    - paragraph: /\\d+\\/\\d+\\/\\d+/
+    - heading "Pagamento" [level=4]
+    - paragraph: ${order.payment}
+    - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
       `);
   })
 
